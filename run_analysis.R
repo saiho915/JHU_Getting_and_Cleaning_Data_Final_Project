@@ -1,6 +1,7 @@
 ## load necessary packages
 library(reshape2)
 
+
 ## Set working directory
 setwd("C:/Users/Administrator/Desktop/Coursera/project")
 
@@ -25,7 +26,7 @@ activityLabels <- read.table('./data/UCI HAR Dataset/activity_labels.txt')
 
 ## Extract measurements on the mean(mean) and standard deviation(std)
 featureIndex <- grep("mean|std", features$V2)
-featureNames <- features[grep("mean|std", features$V2),2]
+featureNames <- features[featureIndex,2]
 
 
 ## Read the data
@@ -56,9 +57,14 @@ totalData$activity <- factor(totalData$activity,
 ## Firstly, I wanted to use group_by and summarize to calculate the values.
 ## But summarize function need name-value pairs, that sounds tedious.
 ## Finally, found that the combination of melt and dcast maybe the best.
+## summarize_all may resolve the problem I mentioned before.
+## totalData %>% group_by(subject, activity) %>% summarize(mean)
+## The code listed above has not been tested.
 meltedData <- melt(totalData, id.vars = c("subject", "activity"))
 averageNeeded <- dcast(meltedData, subject+activity~variable,
                        fun.aggregate = mean,
                        value.var = "value")
+
+
 
 write.table(averageNeeded, "./data/tidy.txt", quote = FALSE, row.names = FALSE)

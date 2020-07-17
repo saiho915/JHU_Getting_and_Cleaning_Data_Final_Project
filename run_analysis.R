@@ -61,4 +61,4 @@ averageNeeded <- dcast(meltedData, subject+activity~variable,
                        fun.aggregate = mean,
                        value.var = "value")
 
-write.table(averageNeeded, "./data/tidy.txt", quote = FALSE)
+write.table(averageNeeded, "./data/tidy.txt", quote = FALSE, row.names = FALSE)
